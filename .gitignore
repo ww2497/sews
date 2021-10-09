@@ -5,3 +5,8 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+
+bin/
+lib/
+lib64
+pyvenv.cfg
