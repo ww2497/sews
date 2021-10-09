@@ -14,8 +14,8 @@ def simulate(r_naught, c):
     weeds = 10
     grasses = 100000 - weeds
 
-    # dictionary of length DURATION
-    # infested[2] = number of weeds that have been alive (?) for 3 days
+    # queue of size DURATION
+    # first element = number of weeds that have been alive (?) for DURATION (14) days
     infested = deque()
     for i in range(DURATION - 1):
         infested.append(0)
