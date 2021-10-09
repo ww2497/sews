@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import random
+from collections import deque
 
 DURATION = 14
 
@@ -15,10 +16,10 @@ def simulate(r_naught, c):
 
     # dictionary of length DURATION
     # infested[2] = number of weeds that have been alive (?) for 3 days
-    infested = {}
-    for i in range(DURATION):
-        infested[i] = 0
-    infested[0] = weeds
+    infested = deque()
+    for i in range(DURATION - 1):
+        infested.append(0)
+    infested.append(weeds)
 
     infested_count = [weeds]
 
@@ -48,14 +49,13 @@ def simulate(r_naught, c):
 
         # 	E.  For all samples that have been infested more then 14 days,
         # 	mark this sample of the lawn as ruined.
-        weeds -= infested[DURATION - 1]
+        weeds -= infested.popleft()
 
         # new weeds
         weeds += new_infested
         grasses -= new_infested
-        for i in range(DURATION - 1, 0, -1):
-            infested[i] = infested[i - 1]
-        infested[0] = new_infested
+
+        infested.append(new_infested)
         infested_count.append(new_infested)
 
     # 5.  Plot the resulting number of weed infestations per day.
