@@ -4,6 +4,18 @@ import matplotlib.pyplot as plt
 # one element to contain and track every square inch of the yard.
 # 2.  Set the initial state of the yard to susceptible to weeds.
 # 3.  Initialize the yard with a certain number of weeds, say 10.
+
+weeds = 10
+grasses = 100000 - weeds
+
+DURATION = 14
+# dictionary of length DURATION
+# infested[2] = number of weeds that have been alive (?) for 3 days
+infested = {}
+for i in range(DURATION):
+    infested[i] = 0
+infested[0] = weeds
+
 # 4.  Repeat until either there are no more weeds, or there is no more yard:
 # 	A.  Compute the number of good grass that would be exposed to the weeds,
 # 	based on the cross-contamination rate.
@@ -20,4 +32,32 @@ import matplotlib.pyplot as plt
 # 			ii.  Mark this lawn sample as infested.
 # 	E.  For all samples that have been infested more then 14 days,
 # 	mark this sample of the lawn as ruined.
+
+'''
+while weeds > 0 and not grasses == 0:
+    # A.
+
+    # B.
+    
+    # C.
+    new_exposures = ...
+    
+    # D.
+    infestations = ...
+    
+    # E.
+    weeds -= infested[DURATION - 1]     # ruined
+    # new weeds
+    weeds += infestations
+    grasses -= infestations
+    for i in range(DURATION - 1, 0, -1):
+        infested[i] = infested[i - 1]
+    infested[0] = new_exposures
+    
+'''
+
 # 5.  Plot the resulting number of weed infestations per day.
+
+# plt.ylabel('Number of Infected')
+# plt.xlabel('Days')
+# plt.show()
