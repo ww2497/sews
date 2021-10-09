@@ -25,7 +25,7 @@ def simulate(r_naught, c):
     # 4.  Repeat until either there are no more weeds, or there is no more yard:
     while weeds > 0 and grasses > 0:
         # 	A.  Compute the number of good grass that would be exposed to the weeds,
-        exposed = weeds * c
+        exposed = (int)(weeds * c)
 
         # 	B.  Find the amount of un-infested lawn left.
         #   ALREADY DONE: grasses
