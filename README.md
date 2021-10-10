@@ -7,3 +7,5 @@ Run the code:
 ```
 python3 main.py
 ```
+
+Displays a graph and saves it to `weed_spread.png`.
