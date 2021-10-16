@@ -3,6 +3,7 @@ import random
 from collections import deque
 
 DURATION = 14
+YARD_SIZE = 100000
 
 
 def simulate(r_naught, c):
@@ -12,7 +13,7 @@ def simulate(r_naught, c):
     # 3.  Initialize the yard with a certain number of weeds, say 10.
 
     weeds = 10
-    grasses = 100000 - weeds
+    grasses = YARD_SIZE - weeds
 
     # queue of size DURATION
     # first element = number of weeds that have been alive (?) for DURATION (14) days
@@ -21,7 +22,7 @@ def simulate(r_naught, c):
         infested.append(0)
     infested.append(weeds)
 
-    infested_count = [weeds]
+    new_infestations = [weeds]
 
     # 4.  Repeat until either there are no more weeds, or there is no more yard:
     while weeds > 0 and grasses > 0:
@@ -56,10 +57,10 @@ def simulate(r_naught, c):
         grasses -= new_infested
 
         infested.append(new_infested)
-        infested_count.append(new_infested)
+        new_infestations.append(new_infested)
 
     # 5.  Plot the resulting number of weed infestations per day.
-    plt.plot(infested_count)
+    plt.plot(new_infestations)
 
 
 simulate(0.3, 4.0)
