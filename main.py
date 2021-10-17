@@ -4,9 +4,8 @@ from matplotlib.pyplot import figure
 import random
 from collections import deque
 
-# total duration in days
+# weed lifespan
 DURATION = 14
-YARD_SIZE = 100000
 
 
 def simulate(r_naught, c):
@@ -15,7 +14,7 @@ def simulate(r_naught, c):
     # 2.  Set the initial state of the yard to susceptible to weeds.
     # 3.  Initialize the yard with a certain number of weeds, say 10.
     weeds = 10
-    grasses = YARD_SIZE - weeds
+    grasses = 100000 - weeds
 
     # queue of size DURATION
     # first element = number of weeds that have been alive (?) for DURATION (14) days
@@ -25,6 +24,7 @@ def simulate(r_naught, c):
     infested.append(weeds)
     active_weeds = [weeds]
     peak_day = 0
+
     # 4.  Repeat until either there are no more weeds, or there is no more yard:
     while weeds > 0 and grasses > 0:
         # 	A.  Compute the number of good grass that would be exposed to the weeds,
@@ -53,13 +53,11 @@ def simulate(r_naught, c):
         # 	mark this sample of the lawn as ruined.
         weeds -= infested.popleft()
 
-        # new weeds
+        # track new weeds, number of cases, and peak day
         weeds += new_infested
         grasses -= new_infested
-
         infested.append(new_infested)
         active_weeds.append(weeds)
-
         if weeds > active_weeds[peak_day]:
             peak_day = len(active_weeds) - 1
 
@@ -83,9 +81,11 @@ simulate(0.3, 0.5)
 simulate(0.3, 0.4)
 simulate(0.3, 0.3)
 
+# label plot
 plt.title('$R_0$ is The Viral Reproduction Number, C is #Contacts, Person to Person')
 plt.ylabel('Actively Growing Weeds on Each Day')
 plt.xlabel('Days')
+
 # start plot at origin (0, 0)
 plt.xlim(xmin=0, xmax=475)
 plt.ylim(ymin=0)
