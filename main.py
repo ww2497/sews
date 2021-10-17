@@ -1,10 +1,11 @@
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import figure
 import random
 from collections import deque
 
+# total duration in days
 DURATION = 14
 YARD_SIZE = 100000
-
 
 def simulate(r_naught, c):
     # 1.  Allocate an array of 100,000 elements,
@@ -18,11 +19,11 @@ def simulate(r_naught, c):
     # queue of size DURATION
     # first element = number of weeds that have been alive (?) for DURATION (14) days
     infested = deque()
-    for i in range(DURATION - 1):
+    for _ in range(DURATION - 1):
         infested.append(0)
     infested.append(weeds)
 
-    new_infestations = [weeds]
+    active_weeds = [weeds]
 
     # 4.  Repeat until either there are no more weeds, or there is no more yard:
     while weeds > 0 and grasses > 0:
@@ -57,12 +58,17 @@ def simulate(r_naught, c):
         grasses -= new_infested
 
         infested.append(new_infested)
-        new_infestations.append(new_infested)
+        active_weeds.append(weeds)
 
-    # 5.  Plot the resulting number of weed infestations per day.
-    plt.plot(new_infestations)
+    # 5.  Plot the resulting number of actively growing weeds per day.
+    # label for legend
+    lbl = "$R_0 = {0}, c = {1}$".format(r_naught, c)
+    plt.plot(active_weeds, label=lbl)
 
+# scale figure nicely
+figure(figsize=(8, 6), dpi=120)
 
+# simulate each curve
 simulate(0.3, 4.0)
 simulate(0.3, 2.0)
 simulate(0.3, 1.0)
@@ -70,8 +76,14 @@ simulate(0.3, 0.5)
 simulate(0.3, 0.4)
 simulate(0.3, 0.3)
 
-plt.ylabel('Cases Per Day')
-plt.xlabel('Days')
-plt.margins(0)
+plt.title('$R_0$ is The Viral Reproduction Number, C is #Contacts, Person to Person')
+plt.ylabel('Actively Growing Weeds On Each Day (in thousands)')
+plt.xlabel('Day')
+# start plot at origin (0, 0)
+plt.xlim(xmin=0)
+plt.ylim(ymin=0)
+# show legend describing each curve
+plt.legend(loc="upper right")
+# save plot to a file and display it
 plt.savefig('weed_spread.png')
 plt.show()
