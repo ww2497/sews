@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.pyplot import figure
 import random
 from collections import deque
@@ -7,12 +8,12 @@ from collections import deque
 DURATION = 14
 YARD_SIZE = 100000
 
+
 def simulate(r_naught, c):
     # 1.  Allocate an array of 100,000 elements,
     # one element to contain and track every square inch of the yard.
     # 2.  Set the initial state of the yard to susceptible to weeds.
     # 3.  Initialize the yard with a certain number of weeds, say 10.
-
     weeds = 10
     grasses = YARD_SIZE - weeds
 
@@ -22,9 +23,8 @@ def simulate(r_naught, c):
     for _ in range(DURATION - 1):
         infested.append(0)
     infested.append(weeds)
-
     active_weeds = [weeds]
-
+    peak_day = 0
     # 4.  Repeat until either there are no more weeds, or there is no more yard:
     while weeds > 0 and grasses > 0:
         # 	A.  Compute the number of good grass that would be exposed to the weeds,
@@ -60,13 +60,20 @@ def simulate(r_naught, c):
         infested.append(new_infested)
         active_weeds.append(weeds)
 
+        if weeds > active_weeds[peak_day]:
+            peak_day = len(active_weeds) - 1
+
+    plt.annotate('R0 = %1.1f, C = %1.1f, Peak = %d @ %d days' % (r_naught, c, active_weeds[peak_day], peak_day),
+                 (peak_day, active_weeds[peak_day] + 1000))
+
     # 5.  Plot the resulting number of actively growing weeds per day.
     # label for legend
     lbl = "$R_0 = {0}, c = {1}$".format(r_naught, c)
     plt.plot(active_weeds, label=lbl)
 
+
 # scale figure nicely
-figure(figsize=(8, 6), dpi=120)
+figure(figsize=(9, 7), dpi=120)
 
 # simulate each curve
 simulate(0.3, 4.0)
@@ -77,13 +84,20 @@ simulate(0.3, 0.4)
 simulate(0.3, 0.3)
 
 plt.title('$R_0$ is The Viral Reproduction Number, C is #Contacts, Person to Person')
-plt.ylabel('Actively Growing Weeds On Each Day (in thousands)')
-plt.xlabel('Day')
+plt.ylabel('Actively Growing Weeds on Each Day')
+plt.xlabel('Days')
 # start plot at origin (0, 0)
-plt.xlim(xmin=0)
+plt.xlim(xmin=0, xmax=475)
 plt.ylim(ymin=0)
+
+# adjust plot tick marks
+xmin, xmax, ymin, ymax = plt.axis()
+plt.xticks(np.arange(xmin, xmax, 50))
+plt.yticks(np.arange(ymin, ymax, 10000))
+
 # show legend describing each curve
 plt.legend(loc="upper right")
+
 # save plot to a file and display it
 plt.savefig('weed_spread.png')
 plt.show()
