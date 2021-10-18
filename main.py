@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.pyplot import figure
 import random
 from collections import deque
 
@@ -26,7 +25,7 @@ def simulate(r_naught, c):
     peak_day = 0
 
     # 4.  Repeat until either there are no more weeds, or there is no more yard:
-    while weeds > 0 and grasses > 0:
+    while weeds > 0:
         # 	A.  Compute the number of good grass that would be exposed to the weeds,
         exposed = (int)(weeds * c)
 
@@ -62,7 +61,7 @@ def simulate(r_naught, c):
             peak_day = len(active_weeds) - 1
 
     plt.annotate('R0 = %1.1f, C = %1.1f, Peak = %d @ %d days' % (r_naught, c, active_weeds[peak_day], peak_day),
-                 (peak_day, active_weeds[peak_day] + 1000))
+                 (peak_day, active_weeds[peak_day] + 500))
 
     # 5.  Plot the resulting number of actively growing weeds per day.
     # label for legend
@@ -71,23 +70,30 @@ def simulate(r_naught, c):
 
 
 # scale figure nicely
-figure(figsize=(9, 7), dpi=120)
-
-# simulate each curve
-simulate(0.3, 4.0)
-simulate(0.3, 2.0)
-simulate(0.3, 1.0)
-simulate(0.3, 0.5)
-simulate(0.3, 0.4)
-simulate(0.3, 0.3)
+plt.figure(figsize=(9, 7), dpi=120)
 
 # label plot
 plt.title('$R_0$ is The Viral Reproduction Number, C is #Contacts, Person to Person')
 plt.ylabel('Actively Growing Weeds on Each Day')
 plt.xlabel('Days')
 
+# simulate and plot each curve
+simulate(0.9, 1.0)
+simulate(0.6, 1.0)
+simulate(0.4, 1.0)
+simulate(0.3, 1.0)
+simulate(0.2, 1.0)
+simulate(0.1, 1.0)
+
+# simulate(0.3, 4.0)
+# simulate(0.3, 2.0)
+# simulate(0.3, 1.0)
+# simulate(0.3, 0.5)
+# simulate(0.3, 0.4)
+# simulate(0.3, 0.3)
+
 # start plot at origin (0, 0)
-plt.xlim(xmin=0, xmax=475)
+plt.xlim(xmin=0, xmax=max(50, plt.axis()[1] * 1.6))
 plt.ylim(ymin=0)
 
 # adjust plot tick marks
