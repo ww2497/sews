@@ -60,8 +60,12 @@ def simulate(r_naught, c):
         if weeds > active_weeds[peak_day]:
             peak_day = len(active_weeds) - 1
 
-    plt.annotate('R0 = %1.1f, C = %1.1f, Peak = %d @ %d days' % (r_naught, c, active_weeds[peak_day], peak_day),
-                 (peak_day, active_weeds[peak_day] + 500))
+    if peak_day in range(19, 35):
+        plt.annotate('R0 = %1.1f, C = %1.1f, Peak = %d @ %d days' % (r_naught, c, active_weeds[peak_day], peak_day),
+                 (peak_day + 5, active_weeds[peak_day] - 1500))
+    else:
+        plt.annotate('R0 = %1.1f, C = %1.1f, Peak = %d @ %d days' % (r_naught, c, active_weeds[peak_day], peak_day),
+                    (peak_day + 5, active_weeds[peak_day] + 500))
 
     # 5.  Plot the resulting number of actively growing weeds per day.
     # label for legend
