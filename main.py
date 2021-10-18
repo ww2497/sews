@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import random
+import random, argparse
 from collections import deque
 
 # weed lifespan
@@ -61,11 +61,17 @@ def simulate(r_naught, c):
             peak_day = len(active_weeds) - 1
 
     if peak_day in range(19, 35):
-        plt.annotate('R0 = %1.1f, C = %1.1f, Peak = %d @ %d days' % (r_naught, c, active_weeds[peak_day], peak_day),
-                 (peak_day + 5, active_weeds[peak_day] - 1500))
+        plt.annotate(
+            "R0 = %1.1f, C = %1.1f, Peak = %d @ %d days"
+            % (r_naught, c, active_weeds[peak_day], peak_day),
+            (peak_day + 5, active_weeds[peak_day] - 1500),
+        )
     else:
-        plt.annotate('R0 = %1.1f, C = %1.1f, Peak = %d @ %d days' % (r_naught, c, active_weeds[peak_day], peak_day),
-                    (peak_day + 5, active_weeds[peak_day] + 500))
+        plt.annotate(
+            "R0 = %1.1f, C = %1.1f, Peak = %d @ %d days"
+            % (r_naught, c, active_weeds[peak_day], peak_day),
+            (peak_day + 5, active_weeds[peak_day] + 500),
+        )
 
     # 5.  Plot the resulting number of actively growing weeds per day.
     # label for legend
@@ -77,24 +83,32 @@ def simulate(r_naught, c):
 plt.figure(figsize=(9, 7), dpi=120)
 
 # label plot
-plt.title('$R_0$ is The Viral Reproduction Number, C is #Contacts, Person to Person')
-plt.ylabel('Actively Growing Weeds on Each Day')
-plt.xlabel('Days')
+plt.title("$R_0$ is The Viral Reproduction Number, C is #Contacts, Person to Person")
+plt.ylabel("Actively Growing Weeds on Each Day")
+plt.xlabel("Days")
 
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "-r", "--rnaught", action="store_true", help="make r_naught constant instead of C"
+)
+args = parser.parse_args()
 # simulate and plot each curve
-simulate(0.9, 1.0)
-simulate(0.6, 1.0)
-simulate(0.4, 1.0)
-simulate(0.3, 1.0)
-simulate(0.2, 1.0)
-simulate(0.1, 1.0)
-
-# simulate(0.3, 4.0)
-# simulate(0.3, 2.0)
-# simulate(0.3, 1.0)
-# simulate(0.3, 0.5)
-# simulate(0.3, 0.4)
-# simulate(0.3, 0.3)
+if args.rnaught:
+    # constant r_naught
+    simulate(0.3, 4.0)
+    simulate(0.3, 2.0)
+    simulate(0.3, 1.0)
+    simulate(0.3, 0.5)
+    simulate(0.3, 0.4)
+    simulate(0.3, 0.3)
+else:
+    # constant C
+    simulate(0.9, 1.0)
+    simulate(0.6, 1.0)
+    simulate(0.4, 1.0)
+    simulate(0.3, 1.0)
+    simulate(0.2, 1.0)
+    simulate(0.1, 1.0)
 
 # start plot at origin (0, 0)
 plt.xlim(xmin=0, xmax=max(50, plt.axis()[1] * 1.6))
@@ -109,5 +123,6 @@ plt.yticks(np.arange(ymin, ymax, 10000))
 plt.legend(loc="upper right")
 
 # save plot to a file and display it
-plt.savefig('weed_spread.png')
+file_name = "weed_spread_r.png" if args.rnaught else "weed_spread_c.png"
+plt.savefig(file_name)
 plt.show()
